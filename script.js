@@ -277,6 +277,16 @@ for (let elem = 0; elem < inputs.length; elem++){
 
                 let iText = document.getElementById('i-text');
                 if (iText) iText.textContent = result.i;
+
+                if (result.i && lInput) {
+                    let hvv = Number(result.i) * Number(lInput);
+                    hvv = Number(hvv.toFixed(3));
+                    let formulaText = `\\text{h}_\\text{вв} = ${Number(result.i).toFixed(5)} * ${lInput} = ${hvv} \\text{ м}`;
+                    hiddenFormulaCont = 'hiddenFormulaHvv';
+                    formulaCont='formulaHvv';
+                    canvasCont='canvasHvv';
+                    calculate(formulaText, hiddenFormulaCont,formulaCont,canvasCont);
+                }
             }
 
             if (Nb1 && Psb1) {

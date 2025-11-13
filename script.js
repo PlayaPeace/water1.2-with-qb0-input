@@ -536,7 +536,7 @@ for (let elem = 0; elem < inputs.length; elem++){
             if (hGeom && hIlInput && hSSum && hL) {
                 hTr = Number(hGeom) + Number(hIlInput) + 20 + Number(hSSum) + Number(hL);
                 hTr = Number(hTr.toFixed(2))
-                let text = Number(hGeom.toFixed(1)) + " + " + Number(Number(hIlInput).toFixed(3)) + " + 20 + " + Number(hSSum.toFixed(3)) + " + 0 + " + Number(hL.toFixed(3)) + " = " + hTr;
+                let text = Number(hGeom.toFixed(1)) + " + " + hIlInput + " + 20 + " + Number(hSSum.toFixed(3)) + " + 0 + " + Number(hL.toFixed(3)) + " = " + hTr;
                 const element = document.getElementById('htr-sum-text');
                 if (element) element.textContent = text;
             }

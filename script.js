@@ -10,6 +10,20 @@ let numApartments;
 let qDB0Input;
 let qDB1Input;
 let lInput;
+let hIlInput;
+let hGInput;
+let dInput;
+let numResidents1;
+let numDevices1;
+
+let h1;
+let h2;
+
+let hGeom;
+let hSSum;
+let hTr
+let hL;
+let qSMax1;
 
 let Htr;
 let Hnijt;
@@ -93,11 +107,56 @@ for (let elem = 0; elem < inputs.length; elem++){
             if (this.hasAttribute('data-l-input')) {
                 lInput = this.value;
                 allValue('[data-l-input]', lInput);
+
+                let element = document.getElementById('l-text');
+                if (element) element.textContent = lInput;
             }
 
-            if (lInput) {
-                let text = document.getElementById('L-text');
-                if (text) text.textContent = lInput;
+            if (this.hasAttribute('data-hIl-input')) {
+                hIlInput = this.value;
+                allValue('[data-hIl-input]', hIlInput);
+
+                let element = document.getElementById('h-il-input');
+                if (element) element.textContent = hIlInput;
+            }
+
+            if (this.hasAttribute('data-hG-input')) {
+                hGInput = this.value;
+                allValue('[data-hG-input]', hGInput);
+
+                let element = document.getElementById('h-g-text');
+                if (element) element.textContent = hGInput;
+            }
+
+            if (this.hasAttribute('data-d-input')) {
+                dInput = this.value;
+                allValue('[data-d-input]', dInput);
+
+                let element = document.getElementById('d-input-text');
+                if (element) element.textContent = dInput;
+            }
+
+            if (this.hasAttribute('data-numResidents1-input')) {
+                numResidents1 = this.value;
+                allValue('[data-numResidents1-input]', numResidents1);
+            }
+
+            if (this.hasAttribute('data-numDevices1-input')) {
+                numDevices1 = this.value;
+                allValue('[data-numDevices1-input]', numDevices1);
+            }
+
+            if (numResidents1 && numDevices1 && Nb0) {
+                let p = 5.1*numResidents1/0.2/3600/Nb0;
+                p = Number(p.toFixed(3));
+                qSMax1 = Number((findAlphaByNP(p * Nb0)).toFixed(4));
+
+                let result = findDQS(Number(qSMax1));
+                let resultText = result.s + " * " + qSMax1 + "² = " + Number((Number(qSMax1)**2 * result.s).toFixed(2));
+                h1 = Number((Number(qSMax1)**2 * result.s).toFixed(2));
+                const text = document.getElementById('h-text');
+                if (text) text.textContent = resultText;
+
             }
 
             if (numFloors) {
@@ -117,6 +176,10 @@ for (let elem = 0; elem < inputs.length; elem++){
                 formulaCont='formulaHnijt';
                 canvasCont='canvasHnijt';
                 calculate(formulaHnijtResult, hiddenFormulaCont,formulaCont,canvasCont);
+
+                hGeom = Number(numFloors) * Number(floorHeight) + 0.8;
+                let element = document.getElementById('h-geom');
+                if (element) element.textContent = Number(hGeom.toFixed(1));
             }
 
             if (numBuildings && numSections && numFloors && numApartments && population && qDB0Input && qDB1Input) {
@@ -148,9 +211,18 @@ for (let elem = 0; elem < inputs.length; elem++){
                 canvasCont='canvasQB0mh';
                 calculate(formulaQB0mhText, hiddenFormulaCont,formulaCont,canvasCont);
 
+                let element = document.getElementById('d-text2');
+                if (element) element.textContent = result.d;
+                element = document.getElementById('d-text3');
+                if (element) element.textContent = result.d;
+
                 const Qb0mhTableElement = document.getElementById('Qb0mh-table');
                 if (Qb0mhTableElement) Qb0mhTableElement.textContent = qB0mh.toString();
                 allValue('Qb0mh-table', qB0mh);
+
+                const tableElement = document.getElementById('Qb0mh-text');
+                if (tableElement) tableElement.textContent = qB0mh.toString();
+                allValue('Qb0mh-text', qB0mh);
 
                 const Qb0dTableElement = document.getElementById('Qb0d-table');
                 if (Qb0dTableElement) Qb0dTableElement.textContent = qb0;
@@ -262,6 +334,23 @@ for (let elem = 0; elem < inputs.length; elem++){
                 if (Qb0maxsTableElement) Qb0maxsTableElement.textContent = qb0s;
                 allValue('Qb0maxs-table', qb0s);
 
+                let element = document.getElementById('Qb0maxs-2');
+                if (element) element.textContent = qb0s;
+
+                //значение в скобках рядом с qb0s
+                const b = Number((qb0s * 3.6).toFixed(3));
+                element = document.getElementById('Qb0maxs-b');
+                if (element) element.textContent = b;
+
+                // hvv
+                let result = findDQS(Number(qb0s));
+                let resultText = result.s + " * " + qb0s + "² = " + Number((Number(qb0s)**2 * result.s).toFixed(2));
+                h2 = Number((Number(qb0s)**2 * result.s).toFixed(2));
+                const Qb0maxsText = document.getElementById('hvv-text');
+                if (Qb0maxsText) Qb0maxsText.textContent = resultText;
+                const dText = document.getElementById('d-text');
+                if (dText) dText.textContent = result.d;
+
                 const Qb0maxsElement = document.getElementById('Qb0maxs-1');
                 if (Qb0maxsElement) Qb0maxsElement.textContent = qb0s;
                 allValue('Qb0maxs-1', qb0s);
@@ -269,24 +358,32 @@ for (let elem = 0; elem < inputs.length; elem++){
                 const NP1Element = document.getElementById('NP1-result');
                 if (NP1Element) NP1Element.textContent = NP1;
 
-                const result = findMatchingValues(qb0s, dataset);
-                let resultText = result.d + " мм (v = " + result.v + " м/с).";
+                //H_l^ввод
+                if(dInput && lInput) {
+                    result = findMatchingValues(qb0s, Number(dInput));
+                    hL = Number((Number(lInput) * Number(result.i)).toFixed(2));
+                    resultText = lInput + " * " + Number(result.i.toFixed(3)) + " = " + hL;
 
-                let dvvText = document.getElementById('dvv-text');
-                if (dvvText) dvvText.textContent = resultText;
+                    let text = document.getElementById('h-l-calculate');
+                    if (text) text.textContent = resultText;
 
-                let iText = document.getElementById('i-text');
-                if (iText) iText.textContent = result.i;
-
-                if (result.i && lInput) {
-                    let hvv = Number(result.i) * Number(lInput);
-                    hvv = Number(hvv.toFixed(3));
-                    let formulaText = `\\text{h}_\\text{вв} = ${Number(result.i).toFixed(5)} * ${lInput} = ${hvv} \\text{ м}`;
-                    hiddenFormulaCont = 'hiddenFormulaHvv';
-                    formulaCont='formulaHvv';
-                    canvasCont='canvasHvv';
-                    calculate(formulaText, hiddenFormulaCont,formulaCont,canvasCont);
+                    text = document.getElementById('h-l-text');
+                    if (text) text.textContent = resultText;
                 }
+
+                //
+                // let iText = document.getElementById('i-text');
+                // if (iText) iText.textContent = result.i;
+
+                // if (result.i && lInput) {
+                //     let hvv = Number(result.i) * Number(lInput);
+                //     hvv = Number(hvv.toFixed(3));
+                //     let formulaText = `\\text{h}_\\text{вв} = ${Number(result.i).toFixed(5)} * ${lInput} = ${hvv} \\text{ м}`;
+                //     hiddenFormulaCont = 'hiddenFormulaHvv';
+                //     formulaCont='formulaHvv';
+                //     canvasCont='canvasHvv';
+                //     calculate(formulaText, hiddenFormulaCont,formulaCont,canvasCont);
+                // }
             }
 
             if (Nb1 && Psb1) {
@@ -370,6 +467,9 @@ for (let elem = 0; elem < inputs.length; elem++){
                 if (Qb0maxhTableElement) Qb0maxhTableElement.textContent = qb0h;
                 allValue('Qb0maxh-table', qb0h);
 
+                const Qb0maxhElement = document.getElementById('Qb0maxh-text');
+                if (Qb0maxhElement) Qb0maxhElement.textContent = qb0h;
+
                 const NP3Element = document.getElementById('NP3-result');
                 if (NP3Element) NP3Element.textContent = NP3;
             }
@@ -424,6 +524,32 @@ for (let elem = 0; elem < inputs.length; elem++){
 
                 const NP4Element = document.getElementById('NP4-result');
                 if (NP4Element) NP4Element.textContent = NP4;
+            }
+
+            if (h1 && h2) {
+                hSSum = Number((Number(h1) + Number(h2)).toFixed(3));
+                let text = h1 + " + " + h2 + " = " + hSSum;
+                const element = document.getElementById('hs-sum');
+                if (element) element.textContent = text;
+            }
+
+            if (hGeom && hIlInput && hSSum && hL) {
+                hTr = Number(hGeom) + Number(hIlInput) + 20 + Number(hSSum) + Number(hL);
+                hTr = Number(hTr.toFixed(2))
+                let text = Number(hGeom.toFixed(1)) + " + " + Number(hIlInput.toFixed(3)) + " + 20 + " + Number(hSSum.toFixed(3)) + " + 0 + " + Number(hL.toFixed(3)) + " = " + hTr;
+                const element = document.getElementById('htr-sum-text');
+                if (element) element.textContent = text;
+            }
+
+            if (hTr && hGInput) {
+                let hP = Number(hTr) - Number(hGInput);
+                hP = Number(hP.toFixed(2))
+                let text = hTr + " - " + Number(hGInput.toFixed(3)) + " = " + hP;
+                let element = document.getElementById('h-p-calculate');
+                if (element) element.textContent = text;
+
+                element = document.getElementById('h-p-text');
+                if (element) element.textContent = hP;
             }
         }
     });
@@ -532,7 +658,6 @@ function calculate(formulaResult, hiddenFormulaCont, formulaCont, canvasCont) {
     }).catch(err => console.error(err));
 }
 
-
 function findAlphaByNP(npValue) {
     if (npValue < 0.015) {
         return 0.200;
@@ -564,18 +689,27 @@ function findAlphaByNP(npValue) {
     }
 }
 
-function findMatchingValues(inputQ, dataset) {
-    // сортируем Q по возрастанию
-    const sorted = dataset.sort((a, b) => a.Q - b.Q);
+function findMatchingValues(inputQ, inputD) {
+    // 1. Копируем и сортируем — без мутации
+    const sorted = [...dataset].sort((a, b) => a.Q - b.Q);
 
-    // находим ближайшее значение Q >= inputQ
+    // 2. Находим ближайшее Q >= inputQ
     const foundQ = sorted.find(entry => entry.Q >= inputQ);
     if (!foundQ) return null;
 
-    // находим первую строку, где v в диапазоне 0.3–1.5
-    const target = foundQ.values.find(item => item.v >= 0.3 && item.v <= 1.5);
-    if (!target) return null;
+    // 3. Ищем строку с нужным d
+    const target = foundQ.values.find(item =>
+        item.d === inputD &&
+        item.v >= 0.3 &&
+        item.v <= 1.5
+    );
 
+    if (!target) {
+        console.log("не нашел")
+        return null;
+    }
+
+    // 4. Возвращаем результат
     return {
         inputQ,
         Q_used: foundQ.Q,
@@ -585,6 +719,83 @@ function findMatchingValues(inputQ, dataset) {
         i1000: target.i
     };
 }
+
+// function findMatchingValues(inputQ) {
+//     // сортируем Q по возрастанию
+//     const sorted = [...dataset].sort((a, b) => a.Q - b.Q);
+//
+//     // находим ближайшее значение Q >= inputQ
+//     const foundQ = sorted.find(entry => entry.Q >= inputQ);
+//     if (!foundQ) return null;
+//
+//     // находим первую строку, где v в диапазоне 0.3–1.5
+//     const target = foundQ.values.find(item => item.v >= 0.3 && item.v <= 1.5);
+//     if (!target) return null;
+//
+//     return {
+//         inputQ,
+//         Q_used: foundQ.Q,
+//         d: target.d,
+//         v: target.v,
+//         i: target.i / 1000,
+//         i1000: target.i
+//     };
+// }
+
+function findDQS(qInput) {
+    const table = [
+        { d: 15, q: 1.2, s: 14.5 },
+        { d: 20, q: 2, s: 5.18 },
+        { d: 25, q: 2.8, s: 2.64 },
+        { d: 32, q: 4, s: 1.3 },
+        { d: 40, q: 6.4, s: 0.5 },
+        { d: 50, q: 12, s: 0.143 },
+        { d: 65, q: 17, s: 0.0081 },
+        { d: 80, q: 36, s: 0.00264 },
+        { d: 100, q: 65, s: 0.000766 },
+        { d: 150, q: 140, s: 0.000013 },
+        { d: 200, q: 210, s: 0.000035 },
+        { d: 250, q: 380, s: 0.000018 }
+    ];
+
+    // Находим первую строку, где q > qInput
+    let index = table.findIndex(row => row.q > qInput);
+
+    // Если нет больше — берём последнюю
+    if (index === -1) return table[table.length - 1];
+    let result = table[index];
+
+    // Проверка условия
+    while (qInput ** 2 * result.s > 5 && index + 1 < table.length) {
+        result = table[index + 1];
+        index++;
+    }
+
+    return{
+        qInput,
+        d: result.d,
+        q: result.q,
+        s: result.s
+    };
+}
+
+console.log(findDQS(1.5));
+// => { d: 20, q: 2, s: 70 }
+
+console.log(findDQS(3));
+// => { d: 25, q: 2.8, s: 2.64 } → 3² * 2.64 = 23.76 > 5 → берём следующее → { d: 32, q: 4, s: 1.3 }
+
+console.log(findDQS(6));
+// => { d: 40, q: 6.4, s: 0.5 } (6²*0.5=18>5 → берём следующее {d:50,...})
+
+console.log(findDQS(1,16));
+// => { d: 40, q: 6.4, s: 0.5 } (6²*0.5=18>5 → берём следующее {d:50,...})
+
+console.log("111");
+// => { d: 40, q: 6.4, s: 0.5 } (6²*0.5=18>5 → берём следующее {d:50,...})
+
+console.log(findDQS(0,72));
+// => { d: 40, q: 6.4, s: 0.5 } (6²*0.5=18>5 → берём следующее {d:50,...})
 
 const dataset = [
     {
@@ -693,53 +904,7 @@ const dataset = [
         "values": [
             { "d": 8, "v": 1.36, "i": 1034.0 },
             { "d": 10, "v": 0.66, "i": 168.7 },
-            { "d": 15, "v": 0.41, "i": 52.5 },
-            { "d": 20, "v": 0.22, "i": 11.2 }
-        ]
-    },
-    {
-        "Q": 0.075,
-        "values": [
-            { "d": 8, "v": 1.46, "i": 1187.0 },
-            { "d": 10, "v": 0.71, "i": 191.4 },
-            { "d": 15, "v": 0.44, "i": 59.5 },
-            { "d": 20, "v": 0.23, "i": 12.7 }
-        ]
-    },
-    {
-        "Q": 0.080,
-        "values": [
-            { "d": 8, "v": 1.55, "i": 1350.0 },
-            { "d": 10, "v": 0.76, "i": 215.5 },
-            { "d": 15, "v": 0.47, "i": 66.9 },
-            { "d": 20, "v": 0.25, "i": 14.2 }
-        ]
-    },
-    {
-        "Q": 0.060,
-        "values": [
-            { "d": 6, "v": 2.83, "i": 7055.0 },
-            { "d": 8, "v": 1.16, "i": 764.5 },
-            { "d": 10, "v": 0.57, "i": 127.3 },
-            { "d": 15, "v": 0.35, "i": 39.9 }
-        ]
-    },
-    {
-        "Q": 0.065,
-        "values": [
-            { "d": 6, "v": 3.06, "i": 9337.0 },
-            { "d": 8, "v": 1.28, "i": 831.2 },
-            { "d": 10, "v": 0.62, "i": 147.3 },
-            { "d": 15, "v": 0.38, "i": 46.0 },
-            { "d": 20, "v": 0.20, "i": 9.84 }
-        ]
-    },
-    {
-        "Q": 0.070,
-        "values": [
-            { "d": 8, "v": 1.36, "i": 1034.0 },
-            { "d": 10, "v": 0.66, "i": 168.7 },
-            { "d": 15, "v": 0.41, "i": 52.5 },
+            { "d": 15, "v": 0.41, "i": 52.6 },
             { "d": 20, "v": 0.22, "i": 11.2 }
         ]
     },
@@ -773,7 +938,7 @@ const dataset = [
     {
         "Q": 0.090,
         "values": [
-            { "d": 8, "v": 1.75, "i": 1703.0 },
+            { "d": 8, "v": 1.75, "i": 1709.0 },
             { "d": 10, "v": 0.85, "i": 267.8 },
             { "d": 15, "v": 0.53, "i": 82.8 },
             { "d": 20, "v": 0.28, "i": 17.5 }
@@ -812,7 +977,7 @@ const dataset = [
             { "d": 8, "v": 2.33, "i": 3037.0 },
             { "d": 10, "v": 1.14, "i": 457.2 },
             { "d": 15, "v": 0.71, "i": 139.9 },
-            { "d": 20, "v": 0.37, "i": 29.2 },
+            { "d": 20, "v": 0.37, "i": 29.22 },
             { "d": 25, "v": 0.22, "i": 8.44 }
         ]
     },
@@ -878,7 +1043,7 @@ const dataset = [
         "Q": 0.19,
         "values": [
             { "d": 10, "v": 1.80, "i": 1135.0 },
-            { "d": 15, "v": 1.12, "i": 327.5 },
+            { "d": 15, "v": 1.12, "i": 327.6 },
             { "d": 20, "v": 0.59, "i": 66.9 },
             { "d": 25, "v": 0.36, "i": 19.1 },
             { "d": 32, "v": 0.20, "i": 4.67 }
@@ -2453,7 +2618,10 @@ const dataset = [
     }
 ];
 
-const result = findMatchingValues(2.703, dataset); // пример ввода
+let result = findMatchingValues(2.2215, 50); // пример ввода
+console.log(result);
+
+result = findMatchingValues(1.16, 50); // пример ввода
 console.log(result);
 
 const npToAlphaTable = [

@@ -129,3 +129,27 @@ th {
     margin-top: 10px;
     text-align: center;
 }
+
+/* Обеспечиваем видимые круглые маркеры */
+ul {
+    list-style-type: disc; /* или circle, но disc — стандартные круглые точки */
+    padding-left: 40px;    /* отступ слева, как в Word */
+    margin: 10px 0;
+    font-family: 'Times New Roman', serif;
+    font-size: 14pt;
+    color: black;
+    line-height: 1.5;
+    text-indent: 1.25cm;
+}
+li {
+    margin-bottom: 8px;    /* расстояние между пунктами */
+    line-height: 1.5;
+}
+/* Принудительно сохраняем символ • через ::before (на случай fallback) */
+li::before {
+    content: "• ";
+    color: black;
+    font-weight: bold;
+    width: 1em;
+    margin-left: -1em;
+}

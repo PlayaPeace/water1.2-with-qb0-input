@@ -361,14 +361,14 @@ for (let elem = 0; elem < inputs.length; elem++){
                 //H_l^ввод
                 if(dInput && lInput) {
                     result = findMatchingValues(qb0s, Number(dInput));
-                    hL = Number((Number(lInput) * Number(result.i)).toFixed(2));
+                    hL = Number((Number(lInput) * Number(result.i)).toFixed(3));
                     resultText = lInput + " * " + Number(result.i.toFixed(3)) + " = " + hL;
 
                     let text = document.getElementById('h-l-calculate');
                     if (text) text.textContent = resultText;
 
                     text = document.getElementById('h-l-text');
-                    if (text) text.textContent = Number(result.i.toFixed(2));
+                    if (text) text.textContent = Number(result.i.toFixed(3));
                 }
 
                 //

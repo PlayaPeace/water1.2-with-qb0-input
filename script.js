@@ -359,7 +359,7 @@ for (let elem = 0; elem < inputs.length; elem++){
                     if (text) text.textContent = textParams;
 
                     const hvvFirst = Number((Number(qb0s)**2 * result.firstS).toFixed(3));
-                    let textCalculate = "h<sub>вод.</sub> = " + result.firstS + " * " + Number((qb0s**2).toFixed(3)) + " = " + hvvFirst + " м. вод. ст, из этого следует, что потери напора выше допустимых, поэтому следует принять счетчик воды на один калибр больше.";
+                    let textCalculate = "h<sub>вод.</sub> = " + result.firstS + " * " + qb0s + "² = " + hvvFirst + " м. вод. ст, из этого следует, что потери напора выше допустимых, поэтому следует принять счетчик воды на один калибр больше.";
                     text = document.getElementById('hvv-check-calculate');
                     if (text) text.innerHTML = textCalculate;
                 }
@@ -555,10 +555,10 @@ for (let elem = 0; elem < inputs.length; elem++){
                 if (element) element.textContent = text;
             }
 
-            if (hGeom && hIlInput && hSSum && hL) {
-                hTr = Number(hGeom) + Number(hIlInput) + 20 + Number(hSSum) + Number(hL);
+            if (hGeom && hIlInput && h2 && hL) {
+                hTr = Number(hGeom) + Number(hIlInput) + 20 + Number(h2) + Number(hL);
                 hTr = Number(hTr.toFixed(2))
-                let text = Number(hGeom.toFixed(1)) + " + " + hIlInput + " + 20 + " + Number(hSSum.toFixed(3)) + " + " + Number(hL.toFixed(3)) + " = " + hTr;
+                let text = Number(hGeom.toFixed(1)) + " + " + hIlInput + " + 20 + " + h2 + " + " + Number(hL.toFixed(3)) + " = " + hTr;
                 const element = document.getElementById('htr-sum-text');
                 if (element) element.textContent = text;
             }

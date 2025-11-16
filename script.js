@@ -157,7 +157,7 @@ for (let elem = 0; elem < inputs.length; elem++){
 
             if (numFloors) {
                 Htr = 10+4*(numFloors-1);
-                formulaHtrResult = `H_{\\text{тр}} = 10+4*(${numFloors}-1) = ${Htr} м (1.1)`;
+                formulaHtrResult = `H_{\\text{тр}} = 10+4*(${numFloors}-1) = ${Htr} м (3.1)`;
                 hiddenFormulaCont = 'hiddenFormulaHtr';
                 formulaCont='formulaHtr';
                 canvasCont='canvasHtr';
@@ -583,19 +583,19 @@ formulaCont='formulaQd';
 canvasCont='canvasQd';
 calculate(formulaQdText, hiddenFormulaCont,formulaCont,canvasCont);
 
-let formulaQmhText = `q_{\\text{ср час}} = \\frac{q_\\text{сут}}{T} \\text{ , (1.3)}`;
+let formulaQmhText = `q_{\\text{ср час}} = \\frac{q_\\text{сут}}{T} \\text{ , (3.3)}`;
 hiddenFormulaCont = 'hiddenFormulaQmh';
 formulaCont='formulaQmh';
 canvasCont='canvasQmh';
 calculate(formulaQmhText, hiddenFormulaCont,formulaCont,canvasCont);
 
-let formulaPsText = `P_{\\text{сек}} = \\frac{q_{\\text{0 час}} * \\text{U}}{3600 * \\text{N} * q_{\\text{0}}} {\\text{, (1.4) где}}`;
+let formulaPsText = `P_{\\text{сек}} = \\frac{q_{\\text{0 час}} * \\text{U}}{3600 * \\text{N} * q_{\\text{0}}} {\\text{, (3.4) где}}`;
 hiddenFormulaCont = 'hiddenFormulaPs';
 formulaCont='formulaPs';
 canvasCont='canvasPs';
 calculate(formulaPsText, hiddenFormulaCont,formulaCont,canvasCont);
 
-let formulaPhText = `P_{\\text{ч}} = \\frac{P_{\\text{c}} * 3600 * q}{q_{\\text{0ч}}} {\\text{, (1.5) где}}`;
+let formulaPhText = `P_{\\text{ч}} = \\frac{P_{\\text{c}} * 3600 * q}{q_{\\text{0ч}}} {\\text{, (3.5) где}}`;
 hiddenFormulaCont = 'hiddenFormulaPh';
 formulaCont='formulaPh';
 canvasCont='canvasPh';

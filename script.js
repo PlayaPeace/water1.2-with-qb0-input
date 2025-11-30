@@ -673,6 +673,7 @@ for (let elem = 0; elem < inputs.length; elem++){
                 if (text) text.textContent = np;
 
                 let a = findAlphaByNP(np);
+                a = Number(a.toFixed(3))
                 text = document.getElementById('a-table2');
                 if (text) text.textContent = a;
 

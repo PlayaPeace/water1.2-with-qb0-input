@@ -17,6 +17,8 @@ let numResidents1;
 let numDevices1;
 //new part 25.11
 let h2Input;
+//new part 30.11
+let nInput;
 
 let h1;
 let h2;
@@ -64,16 +66,28 @@ for (let elem = 0; elem < inputs.length; elem++){
             if (this.hasAttribute('data-num-buildings')) {
                 numBuildings = this.value;
                 allValue('[data-num-buildings]', numBuildings);
+
+                //30.11 add
+                let element = document.getElementById('data-num-buildings');
+                if (element) element.textContent = numBuildings;
             }
 
             if (this.hasAttribute('data-num-sections')) {
                 numSections = this.value;
                 allValue('[data-num-sections]', numSections);
+
+                //30.11 add
+                let element = document.getElementById('data-num-sections');
+                if (element) element.textContent = numSections;
             }
 
             if (this.hasAttribute('data-num-floors')) {
                 numFloors = this.value;
                 allValue('[data-num-floors]', numFloors);
+
+                //30.11 add
+                let element = document.getElementById('data-num-floors');
+                if (element) element.textContent = numFloors;
             }
 
             if (this.hasAttribute('data-floor-height')) {
@@ -84,6 +98,10 @@ for (let elem = 0; elem < inputs.length; elem++){
             if (this.hasAttribute('data-population')) {
                 population = this.value;
                 allValue('[data-population]', population);
+
+                //30.11 add
+                let element = document.getElementById('data-population');
+                if (element) element.textContent = population;
             }
 
             if (this.hasAttribute('data-num-devices')) {
@@ -94,6 +112,10 @@ for (let elem = 0; elem < inputs.length; elem++){
             if (this.hasAttribute('data-num-apartments')) {
                 numApartments = this.value;
                 allValue('[data-num-apartments]', numApartments);
+
+                //30.11 add
+                let element = document.getElementById('data-num-apartments');
+                if (element) element.textContent = numApartments;
             }
 
             if (this.hasAttribute('data-qDB0-input')) {
@@ -144,6 +166,15 @@ for (let elem = 0; elem < inputs.length; elem++){
                 allValue('[data-numDevices1-input]', numDevices1);
             }
 
+            //new part 30.11
+            if (this.hasAttribute('data-n-input')) {
+                nInput = this.value;
+                allValue('[data-n-input]', nInput);
+
+                let text = document.getElementById('n-input-table2');
+                if (text) text.textContent = nInput;
+            }
+
             //new part 25.11
             if (this.hasAttribute('data-h2-input')) {
                 h2Input = this.value;
@@ -163,6 +194,25 @@ for (let elem = 0; elem < inputs.length; elem++){
 
                 let text = document.getElementById('h1');
                 if (text) text.textContent = h1;
+            }
+
+            //new part 30.11
+            if (nInput && Psb0) {
+                let np = Number((nInput * Psb0).toFixed(3));
+                let text = document.getElementById('np-table2');
+                if (text) text.textContent = np;
+
+                let a = findAlphaByNP(np);
+                text = document.getElementById('a-table2');
+                if (text) text.textContent = a;
+
+                let qSB0 = Number((5 * 0.3 * a).toFixed(3));
+                text = document.getElementById('qSB0-table2');
+                if (text) text.textContent = qSB0;
+
+                let qSK1 = Number((1.6 + qSB0).toFixed(3));
+                text = document.getElementById('qSK1-table2');
+                if (text) text.textContent = qSK1;
             }
 
             if (numResidents1 && numDevices1 && Nb0) {
@@ -302,6 +352,10 @@ for (let elem = 0; elem < inputs.length; elem++){
                 Psb0 = Number(Psb0.toFixed(6));
                 let Pb0Calculate = "(11.6 * " + U + `)/(3600*${Nb0}*0.3) = ` + Psb0;
                 allValue('[Pb0-calculate]', Pb0Calculate);
+
+                //new part 30.11
+                let text = document.getElementById('pSB0-table2');
+                if (text) text.textContent = Psb0;
 
                 let formulaPB0sText = `\\text{1)} P_{\\text{сек}}^{\\text{BO}} = \\frac{11.6 * ${U}}{3600*${Nb0}*0.3} = ${Psb0}`;
                 hiddenFormulaCont = 'hiddenFormulaPB0s';

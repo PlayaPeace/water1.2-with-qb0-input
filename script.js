@@ -19,6 +19,8 @@ let numDevices1;
 let h2Input;
 //new part 30.11
 let nInput;
+//new part 04.02
+let numRisers;
 
 let h1;
 let h2;
@@ -189,6 +191,21 @@ for (let elem = 0; elem < inputs.length; elem++){
 
                 text = document.getElementById('h2-2');
                 if (text) text.textContent = h2Input;
+            }
+
+            //new part 04.02
+            if (this.hasAttribute('data-risers-input')) {
+                numRisers = this.value;
+                allValue('[data-risers-input]', numRisers);
+
+                let element = document.getElementById('num-risers-1');
+                if (element) element.textContent = numRisers;
+
+                element = document.getElementById('num-risers-2');
+                if (element) element.textContent = numRisers;
+
+                element = document.getElementById('num-risers-3');
+                if (element) element.textContent = numRisers;
             }
 
             //new part 04.02
